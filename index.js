@@ -1,38 +1,18 @@
 const express = require("express");
-const database = require("./config/database")
-require("dotenv").config();
+const database = require("./config/database") // gán database
+require("dotenv").config();  // kết nối với env (tải thư viên dotenv)
+const routeApiVer1 = require("./api/v1/routes/index.route")
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT; // cách để lấy biến ở env 
 
-database.connect();
+database.connect(); // kết nối với database ở file config
 
-const Task = require("./models/task.model")
+// router Version 1
+routeApiVer1(app); // kết nối với index router (truyền app)
 
-app.get("/tasks", async (req, res) => {
-  const tasks = await Task.find({
-    deleted: false
-  });
 
-  
-  res.json(tasks);
-});
 
-app.get("/tasks/detail/:id", async (req, res) => {
-  const id = req.params.id;
 
-  try {
-const task = await Task.findOne({
-    _id: id,
-    deleted: false
-  })
-
-  
-  res.json(task);
-  } catch(error){
-    res.json("khong tim thay");
-  }
-  
-});
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
