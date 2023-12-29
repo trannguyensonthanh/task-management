@@ -161,3 +161,28 @@ res.json({
 
  
 };
+// [delete] /api/v1/task/delete/:id
+module.exports.delete = async (req, res) => {
+  try {
+const id = req.params.id;
+ await Task.updateOne({
+  _id: id
+ }, {
+  deleted: true,
+  deletedAt: new Date()
+ });
+
+    res.json({
+      code: 200,
+      message: "Xoá thành công!",
+     })
+ }
+ catch (error){
+res.json({
+  code:400,
+  message: "Lỗi"
+})
+  }
+
+ 
+};
