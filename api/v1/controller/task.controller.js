@@ -138,3 +138,26 @@ res.json({
 
  
 };
+
+// [patch] /api/v1/task/edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+const id = req.params.id;
+ await Task.updateOne({
+  _id: id
+ }, req.body);
+
+    res.json({
+      code: 200,
+      message: "cập nhật trạng thái thành công!",
+     })
+ }
+ catch (error){
+res.json({
+  code:400,
+  message: "Lỗi"
+})
+  }
+
+ 
+};
