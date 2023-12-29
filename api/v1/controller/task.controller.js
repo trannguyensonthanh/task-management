@@ -1,23 +1,44 @@
-const Task = require("../models/task.model")
-
+const Task = require("../models/task.model");
+const paginationHelper = require("../../../helpers/pagination");
+const searchHelper = require("../../../helpers/search");
 // [get] /api/v1/task
 module.exports.index = async (req, res) => {
   const find = {
-    deleted: false
-  }
-  console.log(req.query);
-  if(req.query.status){
-   find.status = req.query.status
+    deleted: false,
+  };
+  if (req.query.status) {
+    find.status = req.query.status;
   }
 
-// sort
-const sort = {};
-if(req.query.sortKey && req.query.sortValue){
-  sort[req.query.sortKey] = req.query.sortValue
+  // pagination
+  let initPagination = {
+    limitItems: 0,
+    currentPage: 0,
+  }
+  const countTasks = await Task.countDocuments(find); // sử dụng countDoc.. để đếm só lượng những sản phẩm được phép hiển thị
+  let objectPagination = paginationHelper(
+    initPagination,
+    req,
+    countTasks
+  );
+
+  // sort
+  const sort = {};
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  }
+  //end sort
+
+  const objectSearch = searchHelper(req);
+ // đoạn tìm kiếm
+ if (objectSearch.title) {
+  find.title = objectSearch.title;
 }
-//end sort
 
-  const tasks = await Task.find(find).sort(sort);
+  const tasks = await Task.find(find)
+    .sort(sort)
+    .limit(objectPagination.limitItems)
+    .skip(objectPagination.skip);
   res.json(tasks);
 };
 
@@ -25,13 +46,12 @@ if(req.query.sortKey && req.query.sortValue){
 module.exports.detail = async (req, res) => {
   const id = req.params.id;
   try {
-const task = await Task.findOne({
-    _id: id,
-    deleted: false
-  })
-  res.json(task);
-  } catch(error){
+    const task = await Task.findOne({
+      _id: id,
+      deleted: false,
+    });
+    res.json(task);
+  } catch (error) {
     res.json("khong tim thay");
   }
-  
 };
