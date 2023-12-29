@@ -115,5 +115,26 @@ res.json({
 })
   }
 
+};
+
+// [post] /api/v1/task/create
+module.exports.create = async (req, res) => {
+  try {
+ const task = new Task(req.body);
+ const data = await task.save();
+
+    res.json({
+      code: 200,
+      message: "cập nhật trạng thái thành công!",
+      data: data
+     })
+ }
+ catch (error){
+res.json({
+  code:400,
+  message: "Lỗi"
+})
+  }
+
  
 };
