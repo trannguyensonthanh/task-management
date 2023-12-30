@@ -180,13 +180,28 @@ module.exports.resetPassword = async (req, res) => {
   });
 }
 
-// [Get] /api/v1/password/detail
+// [Get] /api/v1/detail
 module.exports.detail = async (req, res) => {
 
   res.json({
     code: 200,
     message: "Thanh cong",
     info: req.user
+  })
+}
+
+
+// [Get] /api/v1/list
+module.exports.list = async (req, res) => {
+
+  const users = await User.find({
+    deleted: false,
+  }).select("fullName email");
+
+  res.json({
+    code: 200,
+    message: "Thanh cong",
+    users: users
   })
 }
 
