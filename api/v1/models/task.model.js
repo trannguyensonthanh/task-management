@@ -8,6 +8,7 @@ timeStart: Date,
 timeFinish: Date,
 createdBy: String,
 listUser: Array,
+taskParentId: String,
 deleted: {
   type: Boolean,
   default: false
