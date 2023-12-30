@@ -6,6 +6,7 @@ status: String,
 content: String,
 timeStart: Date,
 timeFinish: Date,
+createdBy: String,
 deleted: {
   type: Boolean,
   default: false

@@ -133,6 +133,7 @@ res.json({
 // [post] /api/v1/task/create
 module.exports.create = async (req, res) => {
   try {
+     req.body.createdBy = req.user.id;
  const task = new Task(req.body);
  const data = await task.save();
 
